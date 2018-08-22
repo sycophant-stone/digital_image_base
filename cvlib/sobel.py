@@ -30,5 +30,5 @@ def getSobelKernel(n):
     print(pascalDiffKernel)
     cx=cy=int(n/2)
     sobelKernel_x=conv2d_same(pascalSmoothKernel.transpose(),pascalDiffKernel,cx,cy,stride=1)
-    sobelKernel_y=conv2d_same(pascalSmoothKernel,pascalDiffKernel,cx,cy,stride=1)
+    sobelKernel_y=conv2d_same(pascalSmoothKernel,pascalDiffKernel.transpose(),cx,cy,stride=1)
     return (sobelKernel_x,sobelKernel_y)

@@ -149,3 +149,25 @@ def conv1d_same(src,kernel,ax,ay,stride):
 
     
     return dest
+
+def Gaussian_filter(src, sigma=1.0, k_w = 3, k_h = 3):
+    #产生高斯核
+    h = src.shape[0]
+    w = src.shape[1]
+    dest = np.zeros((h,w), np.uint8)
+    kernel = np.zeros((k_h,k_w), np.float)
+    dest = src.copy()
+    
+    for i in range(k_h):
+        for j in range(k_w):
+            n = -(np.power(i,2)+np.power(j,2))/(2*np.power(sigma,2))
+            #np.exp(n) n意味着e的n次方
+            #print("n:", n)
+            #print("(%d, %d) np.exp(%d):", i, j, n, np.exp(n))
+            kernel[i,j] = np.exp(n)/(2*3.14*np.power(sigma,2))
+    #归一化操作
+    kernel=kernel/np.sum(kernel)
+    #print("kernel,sum", kernel,np.sum(kernel))
+    r=int(k_w/2)
+    dest=conv2d_same(src,kernel,r,r,stride=1)
+    return dest
