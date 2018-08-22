@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.signal import *
 # full类型卷积操作.
 #
 # ax,ay: anchor's location
@@ -169,5 +170,8 @@ def Gaussian_filter(src, sigma=1.0, k_w = 3, k_h = 3):
     kernel=kernel/np.sum(kernel)
     #print("kernel,sum", kernel,np.sum(kernel))
     r=int(k_w/2)
+    
+    # 采用signal的conv方案  效果应该和我的代码类似
+    #dest=convolve2d(src, kernel, mode='full', boundary='fill', fillvalue=0) #scipy.signal.convolve2d
     dest=conv2d_same(src,kernel,r,r,stride=1)
     return dest
