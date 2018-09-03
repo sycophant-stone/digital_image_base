@@ -11,6 +11,7 @@ def conv2d_same(src,kernel,ax,ay,stride):
         print("kernel and image should be square")
         return 
     r=int(kw/2)
+    sw,sh=src.shape
     dst=src.copy()
     dst_full=np.pad(dst,((r,r),(r,r)),constant_values=(0,0),mode='constant') # 扩充2r个0
     dst_full=dst_full.astype(np.float32)
@@ -37,8 +38,8 @@ def conv2d_same(src,kernel,ax,ay,stride):
     #print("i:%d,iw:%d,ih:%d,r:%d,odds:%d" %(i,iw,ih,r,odds))
     sax=ax
     say=ay
-    while i< (iw-2*r):#(iw+2*r-r-odds-1):
-        while j<(ih-2*r):#(ih+2*r-r-odds-1):
+    while i< (iw-r):#(iw+2*r-r-odds-1):
+        while j<(ih-r):#(ih+2*r-r-odds-1):
             temp=kernel*dst_full[(i-r):(i+r+odds),(j-r):(j+r+odds)]
             
             if debug_cnt<10:
@@ -58,7 +59,9 @@ def conv2d_same(src,kernel,ax,ay,stride):
         ax+=stride
         j=r
         ay=say # 易忘记,参数的回归,迭代,更新.
-
+    print("dest[r(%s):sh(%s),r(%s):sw(%s)]:"%(r,sh,r,sw))
+    dest=dest[r:sh+r,r:sw+r]
+    print("after crop: dest.shape:(%s,%s)"%(dest.shape[0],dest.shape[1]))
     return dest
 
 def conv1d_same(src,kernel,ax,ay,stride):
@@ -158,10 +161,11 @@ def Gaussian_filter(src, sigma=1.0, k_w = 3, k_h = 3):
     dest = np.zeros((h,w), np.uint8)
     kernel = np.zeros((k_h,k_w), np.float)
     dest = src.copy()
-    
+    rh=int(k_h/2)
+    rw=int(k_w/2)
     for i in range(k_h):
         for j in range(k_w):
-            n = -(np.power(i,2)+np.power(j,2))/(2*np.power(sigma,2))
+            n = -(np.power(i-rh,2)+np.power(j-rw,2))/(2*np.power(sigma,2))
             #np.exp(n) n意味着e的n次方
             #print("n:", n)
             #print("(%d, %d) np.exp(%d):", i, j, n, np.exp(n))
