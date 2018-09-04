@@ -59,9 +59,9 @@ def conv2d_same(src,kernel,ax,ay,stride):
         ax+=stride
         j=r
         ay=say # 易忘记,参数的回归,迭代,更新.
-    print("dest[r(%s):sh(%s),r(%s):sw(%s)]:"%(r,sh,r,sw))
+    #print("dest[r(%s):sh(%s),r(%s):sw(%s)]:"%(r,sh,r,sw))
     dest=dest[r:sh+r,r:sw+r]
-    print("after crop: dest.shape:(%s,%s)"%(dest.shape[0],dest.shape[1]))
+    #print("after crop: dest.shape:(%s,%s)"%(dest.shape[0],dest.shape[1]))
     return dest
 
 def conv1d_same(src,kernel,ax,ay,stride):
