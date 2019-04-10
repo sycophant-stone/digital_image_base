@@ -10,7 +10,7 @@ using namespace cv;
 
 Mat _conv(Mat img, Mat kernel)
 {
-	Mat dst = Mat::zeros(img.cols, img.rows, CV_8UC3);
+	Mat dst = Mat(img.cols, img.rows, img.type(),img.channels());
 	int r = kernel.cols / 2;
 
     for(int i=0;i<img.cols;i++){
@@ -30,7 +30,7 @@ Mat _conv(Mat img, Mat kernel)
 }
 Mat alg_conv(Mat img)
 {
-    Mat kernel(3,3,CV_8UC3,3);// r,c, type, chn
+    Mat kernel(3,3,img.type(),img.channels());// r,c, type, chn
     Mat dst;
 	int kr, kc, sum = 0;
     kr = kernel.rows;
@@ -49,5 +49,6 @@ Mat alg_conv(Mat img)
 	}
 
     dst = _conv(img,kernel);
+	//filter2D(img, dst, img.depth(), kernel, Point(1, 1), 0.0, BORDER_CONSTANT); // exception occurs
     return dst;
 }
