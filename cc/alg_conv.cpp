@@ -1,21 +1,32 @@
 #include <stdio.h>
+#include<iostream>
 #include <opencv2/opencv.hpp>
-#include "alg_conv.h"
+#include "include\alg_conv.h"
+
+using namespace std;
 using namespace cv;
+
+#define GET_DATA(m,r,c) *( (int*)(m.data+r*m.step[0]+m.step[1]*c))
+
 Mat _conv(Mat img, Mat kernel)
 {
-    char *src=img.data;
-    char *dst=kernel.data;
-    for(int i=0;i<img.rows;i++){
-        for(int j=0;j<img.cols;j++){
+	Mat dst = Mat::zeros(img.cols, img.rows, CV_8UC3);
+	int r = kernel.cols / 2;
+
+    for(int i=0;i<img.cols;i++){
+        for(int j=0;j<img.rows;j++){
             int temp= 0;
-            for(int ki=0;ki<kernel.rows;ki++){
-                for(int kj=0;kj<kernel.cols;kj++){
-                    temp+=src[i*img.rows+j]*kernel[ki*kernel.rows+kj]
+            for(int ki=0;ki<kernel.cols;ki++){
+                for(int kj=0;kj<kernel.rows;kj++){
+					temp += GET_DATA(img, j, i)*GET_DATA(kernel, kj, ki);
                 }
             }
+			if (i + r*img.cols + r + j < img.rows*img.cols) {
+				GET_DATA(dst, j + r, i + r) = temp;
+			}
         }
     }
+	return dst;
 }
 Mat alg_conv(Mat img)
 {
@@ -24,10 +35,9 @@ Mat alg_conv(Mat img)
     int kr,kc;
     kr = kernel.rows;
     kc = kernel.cols;
-    char * src = kernel.data;
     for(int i=0;i<kr;i++){
         for(int j=0;j<kc;j++){
-            src[i*3+j] = 1;
+			GET_DATA(kernel, i,j) = 1;
         }
     }
     dst = _conv(img,kernel);
