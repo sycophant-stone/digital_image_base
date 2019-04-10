@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
+#include "alg_conv.h"
 
 using namespace cv;
-
+#define ALG_CONV
 int main(int argc, char** argv )
 {
+
     if ( argc != 2 )
     {
         printf("usage: DisplayImage.out <Image_Path>\n");
@@ -19,7 +21,11 @@ int main(int argc, char** argv )
         printf("No image data \n");
         return -1;
     }
-    namedWindow("Display Image", WINDOW_AUTOSIZE );
-    imshow("Display Image", image);
+    //namedWindow("Display Image", WINDOW_AUTOSIZE );
+    //imshow("Display Image", image);
+
+    #ifdef ALG_CONV
+    alg_conv(image);
+    #endif
     return 0;
 }
