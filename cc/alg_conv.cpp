@@ -32,14 +32,22 @@ Mat alg_conv(Mat img)
 {
     Mat kernel(3,3,CV_8UC3,3);// r,c, type, chn
     Mat dst;
-    int kr,kc;
+	int kr, kc, sum = 0;
     kr = kernel.rows;
     kc = kernel.cols;
     for(int i=0;i<kr;i++){
         for(int j=0;j<kc;j++){
 			GET_DATA(kernel, i,j) = 1;
+			sum += GET_DATA(kernel, i, j);
         }
     }
+	// normalize
+	for (int i = 0; i<kr; i++) {
+		for (int j = 0; j<kc; j++) {
+			GET_DATA(kernel, i, j) /= sum;
+		}
+	}
+
     dst = _conv(img,kernel);
     return dst;
 }
