@@ -22,13 +22,17 @@ int main(int argc, char** argv )
         printf("No image data \n");
         return -1;
     }
-    //namedWindow("Display Image", WINDOW_AUTOSIZE );
-    //imshow("Display Image", image);
-
-    #ifdef ALG_CONV
+#if 0
+    namedWindow("Display Image", WINDOW_AUTOSIZE );
+    imshow("Display Image", image);
+	waitKey();
+#else 
+    #ifdef  ALG_CONV
 	img_post = alg_conv(image);
-	namedWindow("processed image", WINDOW_AUTOSIZE);
+	namedWindow("Processed Img", WINDOW_AUTOSIZE);
 	imshow("Processed Img", img_post);
+	waitKey();
     #endif
+#endif
     return 0;
 }
